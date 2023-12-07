@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Site Aléatoire</title>
+    <style>
+        body {
+            text-align: center;
+            position: relative;
+            animation: changeColors 5s infinite;
+            transition: background-color 0.5s ease-in-out;
+        }
+
+        @keyframes changeColors {
+            0% {
+                background-color: #3498db; /* Bleu */
+            }
+            25% {
+                background-color: #e74c3c; /* Rouge */
+            }
+            50% {
+                background-color: #2ecc71; /* Vert */
+            }
+            75% {
+                background-color: #f39c12; /* Orange */
+            }
+            100% {
+                background-color: #9b59b6; /* Violet */
+            }
+        }
+
+        .error {
+            color: green;
+            font-size: 1.5em;
+        }
+
+        .moving-button {
+            position: absolute;
+            bottom: 20px; /* Déplacer le bouton mystérieux en dessous de l'écriture */
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .celebration {
+            font-size: 2em;
+            margin-top: 20px;
+        }
+
+        #movingText {
+            font-size: 2em;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            white-space: nowrap;
+            overflow: hidden;
+            animation: moveText 4s infinite linear;
+        }
+
+        @keyframes moveText {
+            0% {
+                left: 0;
+            }
+            100% {
+                left: calc(100% - 100px); /* Ajuster la distance de déplacement */
+            }
+        }
+    </style>
+    <script>
+        const designs = ['minimalisme', 'arc-en-ciel'];
+        const avatars = ['🦄', '🚀', '🌈', '🎉', '😺', '🌍'];
+        const celebrations = ['🎉', '🥳', '🎈', '🌟', '🎊'];
+
+        function changeDesign() {
+            const randomDesign = designs[Math.floor(Math.random() * designs.length)];
+            document.body.className = randomDesign;
+
+            const greeting = getGreeting();
+            document.getElementById('changingText').textContent = greeting;
+
+            const celebrationElement = document.getElementById('celebration');
+            const randomCelebration = getCelebration();
+            celebrationElement.textContent = `Célébrons avec ${randomCelebration}!`;
+
+            moveText();
+            moveChildWithBalloon();
+            moveButton();
+        }
+
+        function getGreeting() {
+            const greetings = [
+                'Bienvenue sur le Site Aléatoire!',
+                'Welcome to the Random Site!',
+                '¡Bienvenido al Sitio Aleatorio!',
+                'Willkommen auf der Zufallsseite!',
+            ];
+
+            return greetings[Math.floor(Math.random() * greetings.length)];
+        }
+
+        function getCelebration() {
+            const randomCelebration = celebrations[Math.floor(Math.random() * celebrations.length)];
+            return randomCelebration;
+        }
+
+        function changeAvatar() {
+            const avatarElement = document.getElementById('avatar');
+            const randomAvatar = avatars[Math.floor(Math.random() * avatars.length)];
+            avatarElement.textContent = randomAvatar;
+        }
+
+        function moveButton() {
+            const button = document.getElementById('movingButton');
+            const newX = Math.random() * window.innerWidth;
+            const newY = Math.random() * window.innerHeight;
+            button.style.transform = `translate(${newX}px, ${newY}px)`;
+        }
+
+        function moveChildWithBalloon() {
+            const childWithBalloon = document.getElementById('childWithBalloon');
+            const balloon = '🎈';
+
+            setInterval(() => {
+                const startX = parseFloat(childWithBalloon.style.left) || Math.random() * window.innerWidth;
+                const startY = parseFloat(childWithBalloon.style.top) || Math.random() * window.innerHeight;
+                const endX = Math.random() * window.innerWidth;
+                const endY = Math.random() * window.innerHeight;
+
+                childWithBalloon.textContent = `👶 ${balloon}`;
+
+                animateChild(startX, startY, endX, endY, childWithBalloon);
+            }, 3000);
+        }
+
+        function animateChild(startX, startY, endX, endY, element) {
+            let currentX = startX;
+            let currentY = startY;
+
+            const animationInterval = setInterval(() => {
+                currentX += (endX - startX) / 100;
+                currentY += (endY - startY) / 100;
+
+                element.style.left = currentX + 'px';
+                element.style.top = currentY + 'px';
+
+                if (Math.abs(currentX - endX) < 1 && Math.abs(currentY - endY) < 1) {
+                    clearInterval(animationInterval);
+                }
+            }, 10);
+        }
+
+        function moveText() {
+            const textElement = document.getElementById('movingText');
+            const newText = 'NUIT DE L\'INFO';
+
+            textElement.textContent = newText;
+        }
+
+        // Appeler la fonction changeDesign au chargement de la page
+        window.onload = changeDesign;
+    </script>
+</head>
+<body>
+    <h1 id="changingText">Bienvenue sur le Site Aléatoire!</h1>
+
+    <button onclick="changeDesign()">Changer le Design</button>
+    <button onclick="changeAvatar()">Changer l'Avatar</button>
+
+    <p class="error">Erreur: quelque chose d'inattendu s'est produit!</p>
+
+    <div>
+        <p>Votre avatar actuel : <span id="avatar">🌟</span></p>
+    </div>
+
+    <p id="celebration" class="celebration"></p>
+
+    <!-- Div représentant l'enfant avec le ballon -->
+    <div id="childWithBalloon"></div>
+
+    <!-- Div représentant le texte mobile -->
+    <div id="movingText"></div>
+
+    <!-- Div représentant le jeune homme avec ses mains et jambes -->
+    <div id="welcomeIT" class="welcome-it"></div>
+
+    <!-- Bouton mystérieux -->
+    <button id="movingButton" class="moving-button" onclick="moveButton()">Bouton Mystère</button>
+</body>
+</html>
